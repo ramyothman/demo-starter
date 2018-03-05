@@ -1,0 +1,71 @@
+<div class="container">
+  <div class="card-item">
+    <div class="card-item-body-top">
+      <div class="months-container" *ngIf="months">
+        <div class="row gutters">
+          <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1" *ngFor="let month of months, let i=index">
+            <h3 class="text-secondary" [class.selected]="currentMonth == i" (click)="setCurrentMonth(i)"> {{month}}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row gutters">
+    <div class="col-lg-4 col-md-4 col-sm-4">
+      <div class="card-item cal-month-view">
+        <div class="card-item-body">
+          <div class="cal-month-view-item" *ngFor="let item of appointments" (click)="getAppointment(item)">
+            <i class="far fa-calendar-alt" ></i>
+
+            <a class="cal-event-title" ><span class="small-text-color">{{item.StartDate | date: 'dd MMM yyyy HH:mm'}}</span> <span>{{item.Subject}}</span></a>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    <div class="col-lg-8 col-md-8 col-sm-8">
+      <div class="card-item">
+        <div class="card-item-body min-width">
+          <div  *ngIf="currentAppointment">
+            <div class="row">
+              <div class="card-value col-lg-2 col-md-2 col-sm-2">
+                <label>Subject:</label>
+              </div>
+              <div class="card-value col-lg-10 col-md-10 col-sm-10">
+                {{currentAppointment.Subject}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="card-value col-lg-2 col-md-2 col-sm-2">
+                <label>Date:</label>
+              </div>
+              <div class="card-value small-text col-lg-10 col-md-10 col-sm-10">
+                {{currentAppointment.StartDate | date: 'dd MMM yyyy HH:mm'}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="card-value col-lg-2 col-md-2 col-sm-2">
+                <label>Organizer:</label>
+              </div>
+              <div class="card-value col-lg-10 col-md-10 col-sm-10">
+                {{currentAppointment.Organizer}}
+              </div>
+            </div>
+            <div class="row">
+              <div class="card-value col-lg-2 col-md-2 col-sm-2">
+                <label>Attendees:</label>
+              </div>
+              <div class="card-value col-lg-10 col-md-10 col-sm-10">
+                {{currentAppointment.Attendees}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+

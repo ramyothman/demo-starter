@@ -1,0 +1,33 @@
+@import "../../../sass/_format_variables";
+.card {
+  border: 1px solid #e4e7f2;
+  border-radius: 0.15rem;
+  margin-bottom: 1rem;
+  box-shadow: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+
+  .card-body {
+    padding: 1rem;
+    position: relative;
+
+    .order-container {
+      padding: 1rem;
+      background-color: #ffffff;
+    }
+  }
+}
+
+.item-price {
+  line-height: 24px;
+  font-size: 24px;
+  text-align: right;
+}
+.text-secondary {
+  color: $menu-color !important;
+}

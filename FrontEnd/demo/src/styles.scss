@@ -1,0 +1,63 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~font-awesome/css/font-awesome.min.css";
+@import "~devextreme/dist/css/dx.common.css";
+@import "~devextreme/dist/css/dx.light.css";
+@import "sass/_format_variables";
+
+body {
+  font-family: "open_sansregular";
+}
+
+.breadcrumbs-holder {
+  border-bottom: 1px solid #BBC7CE;
+  margin-bottom: 15px;
+  background-color: white;
+  min-height: 50px;
+  position: relative;
+  width: 100%;
+  border-bottom: 1px solid #e1e1e1;
+
+  .title {
+    color: $menu-color;
+    font-size: 24px;
+    font-weight: bold;
+  }
+}
+
+
+.issues-header {
+  margin-top: 20px;
+  background-color: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 3px 3px 0 0;
+  color: $issues-title;
+
+  .title {
+    display: inline-block;
+    padding-top: 13px;
+    padding-bottom: 13px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+
+.issue-container {
+  padding: 8px !important;
+  line-height: 1.25 !important;
+  border-left: 1px #e1e4e8 solid !important;
+  border-right: 1px #e1e4e8 solid !important;
+  border-bottom: 1px #e1e4e8 solid !important;
+
+  .issue-title {
+    font-weight: 600 !important;
+    font-size: 16px;
+  }
+}
+
+.number-format{
+  width: 60px;
+  text-align: right;
+  float:right;
+}

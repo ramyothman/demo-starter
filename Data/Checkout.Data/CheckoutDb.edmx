@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TempDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Appointment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="Subject" Type="nvarchar" MaxLength="250" />
+          <Property Name="Organizer" Type="nvarchar" MaxLength="50" />
+          <Property Name="Attendees" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomerKey" Type="nvarchar" MaxLength="250" />
+          <Property Name="CustomerSecret" Type="nvarchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ItemID" Type="nvarchar" MaxLength="50" />
+          <Property Name="OrderID" Type="uniqueidentifier" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="OrderDate" Type="datetime" />
+          <Property Name="TotalPrice" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <Association Name="FK_OrderItem_ToTable">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_ToCustomer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TempDBModelStoreContainer">
+          <EntitySet Name="Appointment" EntityType="Self.Appointment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItem" EntityType="Self.OrderItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_OrderItem_ToTable" Association="Self.FK_OrderItem_ToTable">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_ToCustomer" Association="Self.FK_Orders_ToCustomer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Checkout.Data" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CheckoutDB" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="OrderItem" EntityType="Checkout.Data.OrderItem" />
+          <EntitySet Name="Orders" EntityType="Checkout.Data.Orders" />
+          <AssociationSet Name="FK_OrderItem_ToTable" Association="Checkout.Data.FK_OrderItem_ToTable">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
+          <EntitySet Name="Customer" EntityType="Checkout.Data.Customer" />
+          <AssociationSet Name="FK_Orders_ToCustomer" Association="Checkout.Data.FK_Orders_ToCustomer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <EntitySet Name="Appointment" EntityType="Checkout.Data.Appointment" />
+        </EntityContainer>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="ItemID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OrderID" Type="Guid" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="UnitPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Orders" Relationship="Checkout.Data.FK_OrderItem_ToTable" FromRole="OrderItem" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="OrderDate" Type="DateTime" Precision="3" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="OrderItem" Relationship="Checkout.Data.FK_OrderItem_ToTable" FromRole="Orders" ToRole="OrderItem" />
+          <NavigationProperty Name="Customer" Relationship="Checkout.Data.FK_Orders_ToCustomer" FromRole="Orders" ToRole="Customer" />
+        </EntityType>
+        <Association Name="FK_OrderItem_ToTable">
+          <End Type="Checkout.Data.Orders" Role="Orders" Multiplicity="0..1" />
+          <End Type="Checkout.Data.OrderItem" Role="OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerKey" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerSecret" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Orders" Relationship="Checkout.Data.FK_Orders_ToCustomer" FromRole="Customer" ToRole="Orders" />
+        </EntityType>
+        <Association Name="FK_Orders_ToCustomer">
+          <End Type="Checkout.Data.Customer" Role="Customer" Multiplicity="0..1" />
+          <End Type="Checkout.Data.Orders" Role="Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Appointment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="Subject" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Organizer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Attendees" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TempDBModelStoreContainer" CdmEntityContainer="CheckoutDB">
+          <EntitySetMapping Name="OrderItem">
+            <EntityTypeMapping TypeName="Checkout.Data.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItem">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="Checkout.Data.Orders">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customer">
+            <EntityTypeMapping TypeName="Checkout.Data.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="CustomerSecret" ColumnName="CustomerSecret" />
+                <ScalarProperty Name="CustomerKey" ColumnName="CustomerKey" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Appointment">
+            <EntityTypeMapping TypeName="Checkout.Data.Appointment">
+              <MappingFragment StoreEntitySet="Appointment">
+                <ScalarProperty Name="Attendees" ColumnName="Attendees" />
+                <ScalarProperty Name="Organizer" ColumnName="Organizer" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
