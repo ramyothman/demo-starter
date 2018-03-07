@@ -17,7 +17,7 @@ namespace Checkout.Api
             GlobalConfiguration.Configure(WebApiConfig.Register);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             GlobalConfiguration.Configuration.Filters.Add(new ElmahHandleErrorApiAttribute());
-            GlobalConfiguration.Configuration.MessageHandlers.Add(new AuthorizationHeaderHandler());
+            //GlobalConfiguration.Configuration.MessageHandlers.Add(new AuthorizationHeaderHandler());
         }
 
         /// <summary>

@@ -131,11 +131,61 @@ namespace Checkout.Api.Controllers
         {
             try
             {
-                var result = AutoMapper.Mapper.Map<Checkout.Data.OrderItem>(item);
-                result.ID = Guid.NewGuid(); 
-                entities.OrderItem.Add(result);
+                var orderItem = this.entities.OrderItem.Where(c => c.OrderID == item.OrderID && c.ItemID == item.ItemID).FirstOrDefault();
+                if (orderItem != null)
+                {
+                    orderItem.Quantity++;
+                    orderItem.Price = orderItem.UnitPrice * orderItem.Quantity;
+                }
+                else
+                {
+                    orderItem = AutoMapper.Mapper.Map<Checkout.Data.OrderItem>(item);
+                    entities.OrderItem.Add(orderItem);
+                }
+                    
+                //var result = AutoMapper.Mapper.Map<Checkout.Data.OrderItem>(orderItem);
+                //result.ID = Guid.NewGuid(); 
+                
                 entities.SaveChanges();
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.InnerException.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Clear All Items by Order ID
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        [Route("UpdateItem")]
+        [HttpPost]
+        [SwaggerOperation("UpdateItem")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public IHttpActionResult UpdateItem(OrderItem item)
+        {
+            try
+            {
+                var orderItem = this.entities.OrderItem.Where(c => c.OrderID == item.OrderID && c.ItemID == item.ItemID).FirstOrDefault();
+                if (orderItem != null)
+                {
+                    orderItem.Quantity = item.Quantity;
+                    orderItem.Price = orderItem.UnitPrice * orderItem.Quantity;
+                }
+
+                var order = this.entities.Orders.Where(c => c.ID == item.OrderID).FirstOrDefault();
+                decimal price = 0;
+                foreach(var oitem in order.OrderItem)
+                {
+                    price += oitem.Price.Value;
+                }
+                order.TotalPrice = price;
+                entities.SaveChanges();
+                var result = AutoMapper.Mapper.Map<Models.OrderItem>(orderItem);
+                return Ok(result);
             }
             catch (Exception ex)
             {
