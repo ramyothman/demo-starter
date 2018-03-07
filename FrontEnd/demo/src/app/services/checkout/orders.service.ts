@@ -10,8 +10,27 @@ import { plainToClass, plainToClassFromExist } from "class-transformer";
 @Injectable()
 export class OrdersService extends BaseApiService<Orders> {
   public resourceName: string = 'api/Orders';
+  orderItem: OrderItem;
   constructor(protected http: Http) {
     super(http);
+  }
+
+  AddItem(item: OrderItem): Observable<OrderItem> {
+    const url = `${this.basePath}${this.resourceName}/AddItem`;
+
+    return this.http.post(url, JSON.stringify(item), { headers: this.headers })
+      .map(res => res.json())
+      .map(res => plainToClassFromExist(this.orderItem, res as Object))
+      .catch(this.handleError);
+  }
+
+  UpdateItem(item: OrderItem): Observable<OrderItem> {
+    const url = `${this.basePath}${this.resourceName}/UpdateItem`;
+
+    return this.http.post(url, JSON.stringify(item), { headers: this.headers })
+      .map(res => res.json())
+      .map(res => plainToClassFromExist(this.orderItem, res as Object))
+      .catch(this.handleError);
   }
 
   getOrder(id: string): Observable<Orders> {

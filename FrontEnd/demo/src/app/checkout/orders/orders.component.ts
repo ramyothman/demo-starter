@@ -17,6 +17,24 @@ export class OrdersComponent implements OnInit {
   constructor(private ordersService: OrdersService) {
 
   }
+
+  UpdateItem(item: OrderItem) {
+    
+    item.Price = item.Quantity * item.UnitPrice;
+    this.ordersService.UpdateItem(item).subscribe(result => {
+      this.UpdatePrice();
+    });
+  }
+
+  UpdatePrice() {
+    var price = 0;
+    
+    for (var i = 0; i < this.currentOrder.OrderItem.length; i++) {
+      price += this.currentOrder.OrderItem[i].Price;
+    }
+    this.currentOrder.TotalPrice = price;
+  }
+
   ngOnInit(): void {
     var that = this;
     

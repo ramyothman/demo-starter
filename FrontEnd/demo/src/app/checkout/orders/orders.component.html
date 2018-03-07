@@ -30,11 +30,11 @@
           </div>
         </div>
         <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1">
-          <input class="number-format" [(ngModel)]="item.Quantity" />
+          <input class="number-format" (change)="UpdateItem(item)" [(ngModel)]="item.Quantity" />
           
         </div>
         <div class="col-xl-1 col-lg-1 col-md-1 col-sm-1">
-          <input class="number-format" [(ngModel)]="item.UnitPrice" />
+          {{item.UnitPrice}}
         </div>
         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 item-price ">
           {{item.Quantity * item.UnitPrice}}
